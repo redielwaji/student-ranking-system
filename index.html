@@ -33,6 +33,7 @@
             <div class="card-header">Formulir Data Siswa</div>
             <div class="card-body p-4">
               <form id="studentForm">
+                <input type="hidden" id="editIndex" value="-1" />
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="nama" class="form-label">Nama Lengkap</label>
@@ -127,8 +128,21 @@
                 </div>
 
                 <div class="d-grid gap-2 mt-4">
-                  <button type="submit" class="btn btn-primary">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="submitButton"
+                  >
                     Simpan Data Siswa
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancelButton"
+                    style="display: none"
+                    onclick="cancelEdit()"
+                  >
+                    Batal Edit
                   </button>
                 </div>
               </form>
@@ -140,9 +154,16 @@
       <!-- Tampilan Data -->
       <div class="row mt-4" id="dataSection" style="display: none">
         <div class="col-12">
-          <div class="alert alert-success no-print" role="alert">
-            <h5 class="alert-heading">Data Berhasil Disimpan</h5>
-            <p class="mb-0">
+          <div
+            class="alert alert-success no-print"
+            role="alert"
+            id="successAlert"
+            style="display: none"
+          >
+            <h5 class="alert-heading" id="alertTitle">
+              Data Berhasil Disimpan
+            </h5>
+            <p class="mb-0" id="alertMessage">
               Data siswa telah berhasil disimpan dan ditampilkan dalam tabel di
               bawah.
             </p>
@@ -183,6 +204,7 @@
                       <th>Nilai Bahasa Inggris</th>
                       <th>Rata-rata</th>
                       <th>Peringkat</th>
+                      <th class="no-print">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="studentTableBody">
@@ -199,6 +221,54 @@
             <p class="text-center">
               Dicetak pada: <span id="printDate"></span>
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Konfirmasi Hapus -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Apakah Anda yakin ingin menghapus data siswa
+              <strong id="studentNameToDelete"></strong>?
+            </p>
+            <p class="text-danger">
+              Data yang dihapus tidak dapat dikembalikan!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Batal
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              onclick="deleteStudent()"
+            >
+              Ya, Hapus
+            </button>
           </div>
         </div>
       </div>
