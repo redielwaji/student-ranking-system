@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Input Data Siswa</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header no-print">
+      <div class="container">
+        <h1 class="text-center mb-0">Form Input Data Siswa</h1>
+        <p class="text-center mb-0 mt-2 opacity-75">
+          Masukkan data siswa dan lihat hasilnya dalam tabel
+        </p>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Form Input -->
+      <div class="row justify-content-center no-print">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header">Formulir Data Siswa</div>
+            <div class="card-body p-4">
+              <form id="studentForm">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="nama" class="form-label">Nama Lengkap</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="nama"
+                      placeholder="Masukkan nama lengkap"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="kelas" class="form-label">Kelas</label>
+                    <select class="form-select" id="kelas" required>
+                      <option value="" selected disabled>Pilih Kelas</option>
+                      <option value="10">Kelas 10</option>
+                      <option value="11">Kelas 11</option>
+                      <option value="12">Kelas 12</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="alamat" class="form-label">Alamat</label>
+                  <textarea
+                    class="form-control"
+                    id="alamat"
+                    rows="2"
+                    placeholder="Masukkan alamat lengkap"
+                    required
+                  ></textarea>
+                </div>
+
+                <h5 class="section-title mt-4">Nilai Mata Pelajaran</h5>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="nilaiIpa" class="form-label">Nilai IPA</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="nilaiIpa"
+                      min="0"
+                      max="100"
+                      placeholder="0-100"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="nilaiIps" class="form-label">Nilai IPS</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="nilaiIps"
+                      min="0"
+                      max="100"
+                      placeholder="0-100"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="nilaiMatematika" class="form-label"
+                      >Nilai Matematika</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="nilaiMatematika"
+                      min="0"
+                      max="100"
+                      placeholder="0-100"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="nilaiBahasaInggris" class="form-label"
+                      >Nilai Bahasa Inggris</label
+                    >
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="nilaiBahasaInggris"
+                      min="0"
+                      max="100"
+                      placeholder="0-100"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                  <button type="submit" class="btn btn-primary">
+                    Simpan Data Siswa
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tampilan Data -->
+      <div class="row mt-4" id="dataSection" style="display: none">
+        <div class="col-12">
+          <div class="alert alert-success no-print" role="alert">
+            <h5 class="alert-heading">Data Berhasil Disimpan</h5>
+            <p class="mb-0">
+              Data siswa telah berhasil disimpan dan ditampilkan dalam tabel di
+              bawah.
+            </p>
+          </div>
+
+          <div class="card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <span>Data Siswa</span>
+              <div class="action-buttons no-print">
+                <button class="btn btn-success" onclick="exportToPDF()">
+                  <i class="fas fa-file-pdf"></i> Cetak PDF
+                </button>
+                <button
+                  class="btn btn-outline-secondary"
+                  onclick="printTable()"
+                >
+                  <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-outline-danger" onclick="resetData()">
+                  <i class="fas fa-trash"></i> Reset Data
+                </button>
+              </div>
+            </div>
+            <div class="card-body pt-2">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0" id="studentTable">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Kelas</th>
+                      <th>Alamat</th>
+                      <th>Nilai IPA</th>
+                      <th>Nilai IPS</th>
+                      <th>Nilai Matematika</th>
+                      <th>Nilai Bahasa Inggris</th>
+                      <th>Rata-rata</th>
+                      <th>Peringkat</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentTableBody">
+                    <!-- Data siswa akan ditampilkan di sini -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info untuk PDF -->
+          <div id="pdfInfo" style="display: none">
+            <h3 class="text-center mt-4">Laporan Data Siswa</h3>
+            <p class="text-center">
+              Dicetak pada: <span id="printDate"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
