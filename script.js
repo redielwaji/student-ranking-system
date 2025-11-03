@@ -1,5 +1,4 @@
-
-      // Array untuk menyimpan data siswa
+// Array untuk menyimpan data siswa
       let students = [];
       let deleteIndex = -1;
 
@@ -365,4 +364,3 @@
             }
         `;
       document.head.appendChild(style);
-   
